@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const { restart } = require('nodemon');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 
 exports.signup = (req, res, next) => {
