@@ -4,6 +4,7 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+console.log(process.env);
 
 exports.signup = (req, res, next) => {
     console.log(req);
@@ -35,7 +36,7 @@ exports.login = (req, res, next) => {
                                 userId: user._id,
                                 token: jwt.sign(
                                     { userId: user._id },
-                                    'RANDOM_TOKEN_SECRET',
+                                    process.env.SECRET_TOKEN,
                                     { expiresIn: '24h' }
                                 )
                             });
