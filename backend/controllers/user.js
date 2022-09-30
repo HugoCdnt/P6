@@ -1,10 +1,7 @@
 const bcrypt = require('bcrypt');
-const { restart } = require('nodemon');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-
-console.log(process.env);
 
 exports.signup = (req, res, next) => {
     console.log(req);

@@ -1,11 +1,11 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
+const path = require('path');
 require('dotenv').config();
 
+const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
-
-const User = require('./models/User');
 
 mongoose.connect('mongodb+srv://hcdnt:KdYYjVt2Hg5JcXUD@cluster0.sf5l5zq.mongodb.net/?retryWrites=true&w=majority',
     {
@@ -17,6 +17,8 @@ mongoose.connect('mongodb+srv://hcdnt:KdYYjVt2Hg5JcXUD@cluster0.sf5l5zq.mongodb.
 
 app.use(express.json());
 
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -24,20 +26,17 @@ app.use((req, res, next) => {
     next();
 });
 
+////// TEST POUR REGLER PROBLEME CORS ///////
+
+app.options('/*', (_, response) => {
+    response.sendStatus(200);
+});
+
+/////////////////////////////////////////
+
 // app.use(bodyParser.json());
 
+app.use('/api/sauce', sauceRoutes);
 app.use('/api/auth', userRoutes);
-
-
-// INUTILE
-
-// app.post('/api/auth', () => {
-//     const user = new User({
-//         ...req.body
-//     });
-//     user.save()
-//         .then(() => res.status(201).json({ message: 'Objet enregistré !' }))
-//         .catch(error => res.status(400).json({ error }));
-// });
 
 module.exports = app;
