@@ -17,7 +17,6 @@ mongoose.connect('mongodb+srv://hcdnt:KdYYjVt2Hg5JcXUD@cluster0.sf5l5zq.mongodb.
 
 app.use(express.json());
 
-app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -36,7 +35,8 @@ app.options('/*', (_, response) => {
 
 // app.use(bodyParser.json());
 
-app.use('/api/sauce', sauceRoutes);
+app.use('/api/sauces', sauceRoutes);
 app.use('/api/auth', userRoutes);
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 module.exports = app;
