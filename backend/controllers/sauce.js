@@ -15,9 +15,14 @@ exports.createSauce = (req, res, next) => {
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
 
+    // ///////////////////////////////////////
+    // console.log("--> sauceObject contenu");
+    // console.log(sauceObject);
+    // ///////////////////////////////////////
+
     sauce.save()
         .then(() => { res.status(201).json({ message: 'Sauce ajoutée !' }) })
-        .catch(error => { res.status(400).json({ error }) });
+        .catch(error => { res.status(400).json({ error }) })
 };
 
 
