@@ -7,6 +7,8 @@ require('dotenv').config();
 const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 
+
+// Remplacer phrase de connection par une variable environnement à placer dans .env
 mongoose.connect('mongodb+srv://hcdnt:KdYYjVt2Hg5JcXUD@cluster0.sf5l5zq.mongodb.net/?retryWrites=true&w=majority',
     {
         useNewUrlParser: true,
