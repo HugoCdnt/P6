@@ -5,8 +5,6 @@ exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
     sauceObject.dislikes = 0;
     sauceObject.likes = 0;
-
-    console.log(req.auth.userId);
     // delete sauceObject._id;
     // delete sauceObject._userId;
     const sauce = new Sauce({
@@ -14,7 +12,6 @@ exports.createSauce = (req, res, next) => {
         userId: req.auth.userId,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
-
     sauce.save()
         .then(() => { res.status(201).json({ message: 'Sauce ajoutée !' }) })
         .catch(error => { res.status(400).json({ error }) })
