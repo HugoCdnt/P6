@@ -77,3 +77,18 @@ exports.getAllSauces = (req, res, next) => {
         .then(sauces => res.status(200).json(sauces))
         .catch(error => res.status(400).json({ error }));
 };
+
+
+// Pour le like d'une sauce, 2 éléments à prendre en compte : l'id de la sauce, l'id de l'utilisateur
+
+exports.likeSauce = (req, res, next) => {
+    Sauce.findOne({ _id: req.params.id })
+        .then(sauce => {
+            console.log("ID USER : " + sauce.userId);
+            console.log("ID SAUCE : " + sauce._id);
+            console.log("Nombre de likes : " + sauce.likes);
+            sauce.likes++;
+            // (sauce.userId != req.auth.userId)
+        })
+        .catch(error => res.status(400).json({ error }))
+};
