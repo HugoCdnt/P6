@@ -84,11 +84,17 @@ exports.getAllSauces = (req, res, next) => {
 exports.likeSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
         .then(sauce => {
+            console.log("SAUCE : " + sauce);
             console.log("ID USER : " + sauce.userId);
             console.log("ID SAUCE : " + sauce._id);
             console.log("Nombre de likes : " + sauce.likes);
-            sauce.likes++;
-            // (sauce.userId != req.auth.userId)
+
+            // Sauce.updateOne({ _id: req.params.id }, sauce.likes++)
+            Sauce.updateOne({ _id: req.params.id }, sauce.likes++);
+            sauce.save()
+                .then(() => res.status(200).json({ message: 'Sauce likée !' }))
+                .catch(error => res.status(401).json({ error }));
+
         })
         .catch(error => res.status(400).json({ error }))
 };
