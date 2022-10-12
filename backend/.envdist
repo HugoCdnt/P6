@@ -1,3 +1,3 @@
-SECRET_TOKEN=^+apntRE45/WE56U-)+Qkzkal<qoNBt7S@9M
-DATABASE=mongodb+srv://jerry.smith:MPiivt6upfg43slD@cluster1.vr603zq.mongodb.net/?retryWrites=true&w=majority
+SECRET_TOKEN=Entrez votre phrase secrète pour le JWT
+DATABASE=Mettre la chaine de connexion à votre base mongoDB
                                 
