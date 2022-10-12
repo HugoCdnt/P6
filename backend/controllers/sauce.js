@@ -84,10 +84,12 @@ exports.getAllSauces = (req, res, next) => {
 exports.likeSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
         .then(sauce => {
+
             console.log("SAUCE : " + sauce);
+            console.log(sauce.usersLiked);
             console.log("ID USER : " + sauce.userId);
-            console.log("ID SAUCE : " + sauce._id);
-            console.log("Nombre de likes : " + sauce.likes);
+            // console.log("ID SAUCE : " + sauce._id);
+            // console.log("Nombre de likes : " + sauce.likes);
 
             // Sauce.updateOne({ _id: req.params.id }, sauce.likes++)
             Sauce.updateOne({ _id: req.params.id }, sauce.likes++);

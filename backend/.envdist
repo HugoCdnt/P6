@@ -1,4 +1,3 @@
-SECRET_TOKEN=&=S0EFT78<uW0qo5SmHlNT&ohUb!tQd+cvqQy@9|3ES
-
-
-Mettre 2 exemples pour secret token et bdd ici. Ce fichier sera accessible 
+SECRET_TOKEN=^+apntRE45/WE56U-)+Qkzkal<qoNBt7S@9M
+DATABASE=mongodb+srv://jerry.smith:MPiivt6upfg43slD@cluster1.vr603zq.mongodb.net/?retryWrites=true&w=majority
+                                
