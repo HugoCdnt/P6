@@ -10,6 +10,8 @@ exports.likeSauce = (req, res, next) => {
             console.log("USER ID de Auth : " + req.auth.userId);
             console.log("Likes : " + sauce.usersLiked);
 
+            sauce.likes++;
+
             // sauce.usersLiked.findOne({ userId: sauce.usersLiked })
             //     .then(console.log("trouvé !"));
 
