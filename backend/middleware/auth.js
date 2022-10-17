@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const regExp = require('../library/regexp')
 
 module.exports = (req, res, next) => {
     try {
