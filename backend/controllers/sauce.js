@@ -69,8 +69,21 @@ exports.modifySauce = (req, res, next) => {
     const sauceObject = req.file ? {
         ...JSON.parse(req.body.sauce),
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-        // Vérifier ce que le protocol fait ici
-    } : { ...req.body }
+    } : { ...req.body };
+
+    ///// TEST SUPPRESSION PHOTO //////
+    const photos = fs.readdirSync('./images/');
+    Sauce.findOne({ _id: req.params.id })
+        .then((sauce) => {
+            const photoName = sauce.imageUrl.split('/')[4];
+            fs.unlink(`images/${photoName}`, (err => {
+                if (err) console.log(err);
+                else {
+                    console.log("Deleted file");
+                }
+            }))
+        })
+    ///////////////////////////////////
 
     delete sauceObject._userId;
     Sauce.findOne({ _id: req.params.id })
@@ -80,11 +93,10 @@ exports.modifySauce = (req, res, next) => {
             } else {
                 if ((formRegExp.test(req.body.name)) && (formRegExp.test(req.body.manufacturer)) && (formRegExp.test(req.body.description)) && (formRegExp.test(req.body.mainPepper))) {
                     Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
-                        // .then(() => res.status(204).json(''))
                         .then(() => res.status(200).json({ message: 'Sauce modifiée !' }));
                 } else {
+                    // A retravailler
                     throw 'ERREUR : Merci de remplir tous les champs';
-                    // console.log("Merci de remplir tous les champs");
                 }
             }
         })
