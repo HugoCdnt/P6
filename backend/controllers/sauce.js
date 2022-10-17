@@ -81,9 +81,10 @@ exports.modifySauce = (req, res, next) => {
                 if ((formRegExp.test(req.body.name)) && (formRegExp.test(req.body.manufacturer)) && (formRegExp.test(req.body.description)) && (formRegExp.test(req.body.mainPepper))) {
                     Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
                         // .then(() => res.status(204).json(''))
-                        .then(() => res.status(204).json({ message: 'Sauce modifiée !' }));
+                        .then(() => res.status(200).json({ message: 'Sauce modifiée !' }));
                 } else {
-                    console.log("Merci de remplir tous les champs");
+                    throw 'ERREUR : Merci de remplir tous les champs';
+                    // console.log("Merci de remplir tous les champs");
                 }
             }
         })
