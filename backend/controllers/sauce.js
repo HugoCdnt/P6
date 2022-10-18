@@ -73,16 +73,19 @@ exports.modifySauce = (req, res, next) => {
 
     ///// TEST SUPPRESSION PHOTO //////
     const photos = fs.readdirSync('./images/');
-    Sauce.findOne({ _id: req.params.id })
-        .then((sauce) => {
-            const photoName = sauce.imageUrl.split('/')[4];
-            fs.unlink(`images/${photoName}`, (err => {
-                if (err) console.log(err);
-                else {
-                    console.log("Deleted file");
-                }
-            }))
-        })
+
+    req.file ?
+        Sauce.findOne({ _id: req.params.id })
+            .then((sauce) => {
+                const photoName = sauce.imageUrl.split('/')[4];
+                fs.unlink(`images/${photoName}`, (err => {
+                    if (err) console.log(err);
+                    else {
+                        console.log("Deleted file");
+                    }
+                }))
+            })
+        : console.log("Aucune modification d'image");
     ///////////////////////////////////
 
     delete sauceObject._userId;
