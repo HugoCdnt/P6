@@ -3,22 +3,6 @@ const fs = require('fs');
 
 const formRegExp = /^(.|\s)*\S(.|\s)*$/;
 
-// exports.createSauce = (req, res, next) => {
-//     const sauceObject = JSON.parse(req.body.sauce);
-//     sauceObject.dislikes = 0;
-//     sauceObject.likes = 0;
-//     // delete sauceObject._id;
-//     // delete sauceObject._userId;
-//     const sauce = new Sauce({
-//         ...sauceObject,
-//         userId: req.auth.userId,
-//         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-//     });
-//     sauce.save()
-//         .then(() => { res.status(201).json({ message: 'Sauce ajoutée !' }) })
-//         .catch(error => { res.status(400).json({ error }) })
-// };
-
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
     sauceObject.dislikes = 0;
@@ -36,44 +20,19 @@ exports.createSauce = (req, res, next) => {
             .then(() => { res.status(201).json({ message: 'Sauce ajoutée !' }) })
             .catch(error => { res.status(400).json({ error }) })
     } else {
-        throw 'ERREUR : Merci de remplir tous les champs';
-        // console.log("Merci de remplir tous les champs");
+        res.status(401).json({ message: 'Merci de remplir tous les champs' });
     }
 };
 
-
-
-// exports.modifySauce = (req, res, next) => {
-//     const sauceObject = req.file ? {
-//         ...JSON.parse(req.body.sauce),
-//         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-//         // Vérifier ce que le protocol fait ici
-//     } : { ...req.body }
-
-//     delete sauceObject._userId;
-//     Sauce.findOne({ _id: req.params.id })
-//         .then((sauce) => {
-//             if (sauce.userId != req.auth.userId) {
-//                 res.status(401).json({ message: 'Non autorisé' });
-//             } else {
-//                 Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
-//                     // .then(() => res.status(204).json(''))
-//                     .then(() => res.status(204).json({ message: 'Sauce modifiée !' }))
-//                     .catch(error => res.status(401).json({ error }));
-//             }
-//         })
-//         .catch(error => res.status(404).json({ error: 'Not found' }))
-// };
-
 exports.modifySauce = (req, res, next) => {
+
+
     const sauceObject = req.file ? {
         ...JSON.parse(req.body.sauce),
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
 
-    ///// TEST SUPPRESSION PHOTO //////
-    const photos = fs.readdirSync('./images/');
-
+    ///// Suppression photo SI la requête contient un fichier //////
     req.file ?
         Sauce.findOne({ _id: req.params.id })
             .then((sauce) => {
@@ -86,20 +45,19 @@ exports.modifySauce = (req, res, next) => {
                 }))
             })
         : console.log("Aucune modification d'image");
-    ///////////////////////////////////
 
     delete sauceObject._userId;
+
     Sauce.findOne({ _id: req.params.id })
         .then((sauce) => {
             if (sauce.userId != req.auth.userId) {
                 res.status(401).json({ message: 'Non autorisé' });
             } else {
-                if ((formRegExp.test(req.body.name)) && (formRegExp.test(req.body.manufacturer)) && (formRegExp.test(req.body.description)) && (formRegExp.test(req.body.mainPepper))) {
+                if ((formRegExp.test(sauceObject.name)) && (formRegExp.test(sauceObject.manufacturer)) && (formRegExp.test(sauceObject.description)) && (formRegExp.test(sauceObject.mainPepper)) && (sauceObject.heat >= 1 && sauceObject.heat <= 10)) {
                     Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
                         .then(() => res.status(200).json({ message: 'Sauce modifiée !' }));
                 } else {
-                    // A retravailler
-                    throw 'ERREUR : Merci de remplir tous les champs';
+                    res.status(401).json({ message: 'Merci de remplir tous les champs' });
                 }
             }
         })
