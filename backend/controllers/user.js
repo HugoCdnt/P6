@@ -18,7 +18,7 @@ exports.signup = (req, res, next) => {
             })
             .catch(error => res.status(500).json({ error }));
     } else {
-        res.status(401).json({ message: "Mot de passe invalide" })
+        res.status(401).json({ message: "Mot de passe invalide. Merci d'entrer un mot de passe d'au moins 8 caractères, dont 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial" })
     };
 };
 

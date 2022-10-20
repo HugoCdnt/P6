@@ -20,7 +20,7 @@ exports.createSauce = (req, res, next) => {
             .then(() => { res.status(201).json({ message: 'Sauce ajoutée !' }) })
             .catch(error => { res.status(400).json({ error }) })
     } else {
-        res.status(401).json({ message: 'Merci de remplir tous les champs' });
+        res.status(422).json({ message: 'Merci de remplir tous les champs' });
     }
 };
 
@@ -32,8 +32,7 @@ exports.modifySauce = (req, res, next) => {
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
 
-    ///// Suppression photo SI la requête contient un fichier //////
-    req.file ?
+    if (req.file) {
         Sauce.findOne({ _id: req.params.id })
             .then((sauce) => {
                 const photoName = sauce.imageUrl.split('/')[4];
@@ -44,20 +43,20 @@ exports.modifySauce = (req, res, next) => {
                     }
                 }))
             })
-        : console.log("Aucune modification d'image");
+    }
 
     delete sauceObject._userId;
 
     Sauce.findOne({ _id: req.params.id })
         .then((sauce) => {
             if (sauce.userId != req.auth.userId) {
-                res.status(401).json({ message: 'Non autorisé' });
+                res.status(403).json({ message: 'Non autorisé' });
             } else {
                 if ((formRegExp.test(sauceObject.name)) && (formRegExp.test(sauceObject.manufacturer)) && (formRegExp.test(sauceObject.description)) && (formRegExp.test(sauceObject.mainPepper)) && (sauceObject.heat >= 1 && sauceObject.heat <= 10)) {
                     Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
                         .then(() => res.status(200).json({ message: 'Sauce modifiée !' }));
                 } else {
-                    res.status(401).json({ message: 'Merci de remplir tous les champs' });
+                    res.status(422).json({ message: 'Merci de remplir tous les champs' });
                 }
             }
         })
@@ -69,7 +68,7 @@ exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
         .then(sauce => {
             if (sauce.userId != req.auth.userId) {
-                res.status(401).json({ message: 'Non autorisé' })
+                res.status(403).json({ message: 'Non autorisé' })
             } else {
                 const filename = sauce.imageUrl.split('/images/')[1];
                 fs.unlink(`images/${filename}`, () => {
